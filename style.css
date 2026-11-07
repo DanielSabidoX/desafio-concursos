@@ -1151,3 +1151,46 @@ input::placeholder { color: var(--muted); }
   .player-setup-row { flex-wrap: wrap; }
   .mini-badge { display: none; }
 }
+
+.room-theme-settings {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.room-theme-settings h3 {
+  margin: 0 0 4px;
+  font-family: 'Oswald', sans-serif;
+  font-size: 18px;
+  text-transform: uppercase;
+}
+
+.theme-picker {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+  gap: 8px;
+}
+
+.theme-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 9px 10px;
+  border: 1px solid color-mix(in srgb, var(--tc) 40%, transparent);
+  border-radius: var(--radius-md);
+  background: var(--panel-2);
+  color: var(--ink-soft);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.theme-check.is-on {
+  border-color: var(--tc);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--tc) 22%, transparent), var(--panel-2));
+  color: var(--ink);
+}
+
+.theme-check input { accent-color: var(--tc); }
+.theme-check-icon { font-size: 17px; }

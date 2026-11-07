@@ -131,6 +131,13 @@
           '<span class="aa-title">Encerrar partida</span>' +
           '<span class="aa-desc">Declara vencedor quem estiver mais à frente no tabuleiro.</span>' +
         '</button>' +
+        (room.phase === 'playing'
+          ? '<button type="button" class="admin-action is-danger" ' +
+            'onclick="if(confirm(\'Cancelar a partida agora para todos os jogadores? O resultado atual não será salvo como vitória.\')) __master.cancelGame()">' +
+              '<span class="aa-title">Cancelar partida</span>' +
+              '<span class="aa-desc">Encerra a partida para todos sem declarar um vencedor.</span>' +
+            '</button>'
+          : '') +
         (online
           ? '<button type="button" class="admin-action" onclick="__master.copyCode()">' +
               '<span class="aa-title">Copiar código</span>' +

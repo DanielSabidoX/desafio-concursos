@@ -82,7 +82,9 @@ service cloud.firestore {
 | `theme.css` | tokens de cor, espaçamento, raios e camadas |
 | `panels.css` | moldura comum dos painéis (`.panel-handle`, `.panel-body`, etc.) |
 | `style.css` | visual das telas principais (início, preparação, partida, resultado) |
-| `data.js` | **dados editáveis**: temas, tabuleiro e banco de perguntas |
+| `data.js` | registro de matérias, helpers e tabuleiro |
+| `themes/*.js` | metadados e perguntas, separados por matéria |
+| `theme-manifest.js` / `theme-loader.js` | lista e carregamento das matérias antes do jogo |
 | `main.js` | lógica do jogo (estado, turnos, apostas, respostas, ranking, salas) |
 | `firebase-config.js` | configuração do Firestore (opcional) |
 | `board.js` / `board.css` | painel do tabuleiro 6×6 com peões e pote |
@@ -97,12 +99,41 @@ quando o `main.js` dispara o evento `master:update`.
 
 ---
 
-## Editar o conteúdo do jogo (`data.js`)
+## Editar o conteúdo do jogo
 
 ### Temas
 
-`MASTER_THEMES` define nome, ícone, cores e descrição dos 6 temas oficiais.
-`MASTER_THEME_ORDER` define a ordem exibida nos menus e sorteios.
+Cada arquivo em `themes/` registra os metadados e as perguntas de uma matéria.
+As perguntas seguem este formato:
+
+```js
+masterRegisterTheme(
+  {
+    key: 'biologia',
+    name: 'Biologia',
+    short: 'Bio.',
+    icon: '🧬',
+    color: '#16a34a',
+    color2: '#166534',
+    desc: 'Biologia e ciências da vida.'
+  },
+  [
+    { q: 'Enunciado da pergunta?',
+      options: ['Alternativa A', 'Alternativa B', 'Alternativa C', 'Alternativa D'],
+      answer: 1 }
+  ]
+);
+```
+
+Para adicionar uma matéria:
+
+1. Crie `themes/biologia.js` usando `masterRegisterTheme` e inclua pelo menos uma pergunta.
+2. Adicione `'themes/biologia.js'` ao array `MASTER_THEME_FILES` em `theme-manifest.js`.
+
+O navegador não consegue descobrir sozinho quais arquivos existem em uma hospedagem
+estática; o manifesto é o registro que permite ao carregador buscar cada arquivo.
+As matérias registradas aparecem automaticamente na seleção da sala, no tabuleiro
+e nas perguntas, sem precisar alterar `main.js`.
 
 ### Tabuleiro
 
@@ -119,25 +150,16 @@ da direita para a esquerda, e assim por diante).
 
 ### Perguntas
 
-`MASTER_QUESTIONS` tem 12 perguntas por tema (72 no total) como **banco inicial de
-exemplo**. O baralho físico tem 350 cartas com 6 temas cada; substitua/amplie as
-perguntas reais neste formato:
-
-```js
-{ q: 'Enunciado da pergunta?',
-  options: ['Alternativa A', 'Alternativa B', 'Alternativa C', 'Alternativa D'],
-  answer: 1 }   // índice da correta: 0 = A, 1 = B, 2 = C, 3 = D
-```
-
-O sorteio evita repetir a mesma pergunta na partida; quando o tema se esgota, as
-perguntas daquele tema são recicladas.
+O jogo inclui 50 perguntas de exemplo em cada uma das seis matérias originais. O
+sorteio evita repetir perguntas na partida; quando o banco de uma matéria se
+esgota, as perguntas dela são recicladas.
 
 ---
 
 ## Regras implementadas
 
 - 2 a 6 jogadores, 5 fichas de aposta (valores 1 a 5) por jogador.
-- 6 temas: Artes, Ciências, Entretenimento, Esportes, Geografia e História.
+- Matérias selecionadas pelo anfitrião na sala de espera; pelo menos uma deve ser escolhida.
 - O jogador da vez escolhe o tema permitido pela casa (no INÍCIO, qualquer tema).
 - É obrigatório apostar uma ficha antes de responder.
 - Acertou: avança no tabuleiro o número de casas igual ao valor da ficha.
@@ -167,8 +189,8 @@ As regras em `regras.js` foram transcritas por OCR das fotos `regras1.jpg` e
 `regras2.jpg`. O tabuleiro, as peças e as fichas foram reconstruídos a partir das
 fotos `tabuleiro.jpg`, `pecas.jpg` e `fichas.jpeg`, com cores e layout
 aproximados — o modelo de IA usado na criação não conseguiu interpretar as
-imagens visualmente. As perguntas de `data.js` são um banco inicial, não o
+imagens visualmente. As perguntas em `themes/` são um banco inicial, não o
 conteúdo exato das 350 cartas físicas.
 
-Se você tiver o texto das cartas (ou uma foto mais nítida), basta substituir o
-conteúdo de `MASTER_QUESTIONS` em `data.js`.
+Se você tiver o texto das cartas (ou uma foto mais nítida), substitua ou amplie
+as perguntas nos arquivos correspondentes em `themes/`.

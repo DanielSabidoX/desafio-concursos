@@ -147,7 +147,7 @@
 
   function buildInfo(room) {
     if (selectedPos != null) {
-      var sp = window.masterBoardSpace ? window.masterBoardSpace(selectedPos) : null;
+      var sp = window.masterBoardSpace ? window.masterBoardSpace(selectedPos, room) : null;
       var here = (room.players || []).filter(function (p) {
         return !p.left && p.pos === selectedPos;
       }).map(function (p) { return p.name; });
@@ -205,7 +205,7 @@
     }
 
     var cells = '';
-    var board = window.MASTER_BOARD || [];
+    var board = window.masterRoomBoard ? window.masterRoomBoard(room) : (window.MASTER_BOARD || []);
     for (var i = 0; i < board.length; i++) cells += renderSpace(board[i], i, room);
 
     var html = '<div class="master-board">' + cells + '</div>';

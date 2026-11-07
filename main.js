@@ -316,9 +316,10 @@
   }
 
   function positionLabel(pos) {
-    if (pos >= masterBoardLastPos()) return 'FIM';
+    var room = state.room;
+    if (pos >= masterBoardLastPos(room)) return 'FIM';
     if (pos <= 0) return 'INÍCIO';
-    var sp = masterBoardSpace(pos);
+    var sp = masterBoardSpace(pos, room);
     return 'Casa ' + pos + ' · ' + masterSpaceLabel(sp);
   }
 
@@ -374,9 +375,9 @@
 
     room.round = Math.floor(room.turnIndex / Math.max(1, room.turnOrder.length)) + 1;
 
-    if (p.pos >= masterBoardLastPos()) {
+    if (p.pos >= masterBoardLastPos(room)) {
       room.step = 'final-theme';
-      room.availableThemes = MASTER_THEME_ORDER.slice();
+      room.availableThemes = masterRoomThemes(room);
       room.selectedTheme = null;
       room.question = null;
       log(room, p.name + ' está no FIM e vai responder à pergunta final. Os outros jogadores escolhem o tema.', 'info');
@@ -388,8 +389,8 @@
       log(room, p.name + ' recolheu as 5 fichas de aposta.', 'info');
     }
 
-    var space = masterBoardSpace(p.pos);
-    var themes = (p.pos === 0) ? MASTER_THEME_ORDER.slice() : ((space && space.themes) || []).slice();
+    var space = masterBoardSpace(p.pos, room);
+    var themes = (p.pos === 0) ? masterRoomThemes(room) : ((space && space.themes) || []).slice();
     room.availableThemes = themes;
 
     if (themes.length === 1) {
@@ -514,7 +515,7 @@
         state.code = '';
         state.playerId = null;
         state.screen = 'home';
-        state.error = 'O anfitrião encerrou a sala.';
+        state.error = 'O anfitrião cancelou a partida.';
       }
 
       render();
@@ -581,6 +582,30 @@
     state.onlineThemes = applyThemeToggle(state.onlineThemes, key, input);
   }
 
+  function toggleRoomTheme(key, input) {
+    if (!isHost() || !state.room || state.room.phase !== 'lobby') return;
+    var selected = masterRoomThemes(state.room);
+    if (input && !input.checked && selected.length === 1 && selected[0] === key) {
+      input.checked = true;
+      state.error = 'Selecione pelo menos uma matéria.';
+      render();
+      return;
+    }
+    mutateAndRender(function (room) {
+      if (room.phase !== 'lobby') throw new Error('A seleção de matérias só pode mudar na sala de espera.');
+      if (!MASTER_THEMES[key]) return;
+      var themes = masterRoomThemes(room);
+      var index = themes.indexOf(key);
+      if (input && input.checked && index < 0) themes.push(key);
+      if (input && !input.checked && index >= 0) themes.splice(index, 1);
+      room.themes = MASTER_THEME_ORDER.filter(function (theme) {
+        return themes.indexOf(theme) >= 0;
+      });
+      room.board = masterBuildBoard(room.themes);
+      state.error = '';
+    });
+  }
+
   function createLocalGame() {
     var count = state.local.count;
     var names = [];
@@ -600,6 +625,8 @@
       code: code,
       mode: 'local',
       hostId: players[0].id,
+      themes: MASTER_THEME_ORDER.slice(),
+      board: masterBuildBoard(MASTER_THEME_ORDER),
       phase: 'lobby',
       players: players,
       spectators: [],
@@ -663,6 +690,8 @@
       code: code,
       mode: 'online',
       hostId: pid,
+      themes: MASTER_THEME_ORDER.slice(),
+      board: masterBuildBoard(MASTER_THEME_ORDER),
       phase: 'lobby',
       players: [newPlayer(pid, name.slice(0, 24), PLAYER_COLORS[0])],
       spectators: [],
@@ -795,6 +824,8 @@
       if ((room.players || []).length < MIN_PLAYERS) {
         throw new Error('São necessários pelo menos 2 jogadores.');
       }
+      room.themes = masterCleanThemes(room.themes);
+      room.board = masterBuildBoard(room.themes);
 
       room.phase = 'playing';
       room.turnOrder = room.players.map(function (p) { return p.id; });
@@ -836,7 +867,7 @@
   function chooseFinalTheme(theme) {
     mutateAndRender(function (room) {
       if (room.phase !== 'playing' || room.step !== 'final-theme') return;
-      if (MASTER_THEME_ORDER.indexOf(theme) < 0) return;
+      if (masterRoomThemes(room).indexOf(theme) < 0) return;
 
       var p = activePlayer(room);
       if (!p) return;
@@ -903,9 +934,9 @@
       if (q.correct) {
         p.correct += 1;
         var before = p.pos;
-        p.pos = Math.min(masterBoardLastPos(), p.pos + (q.bet || 1));
+        p.pos = Math.min(masterBoardLastPos(room), p.pos + (q.bet || 1));
         var moved = p.pos - before;
-        if (p.pos >= masterBoardLastPos()) {
+        if (p.pos >= masterBoardLastPos(room)) {
           log(room, '✅ ' + p.name + ' acertou e avançou ' + moved + ' casa' + (moved > 1 ? 's' : '') + ', chegando ao FIM!', 'good');
         } else {
           log(room, '✅ ' + p.name + ' acertou e avançou ' + moved + ' casa' + (moved > 1 ? 's' : '') + '.', 'good');
@@ -1010,7 +1041,7 @@
     if (!isHost()) return;
     Store.mutate(state.code, function (room) {
       room.phase = 'cancelled';
-      log(room, 'O anfitrião encerrou a sala.', 'system');
+      log(room, 'O anfitrião cancelou a partida.', 'system');
     }).then(function () {
       if (unsubRoom) { unsubRoom(); unsubRoom = null; }
       clearSession();
@@ -1022,6 +1053,28 @@
       render();
     }).catch(function (err) {
       state.error = err && err.message ? err.message : 'Não foi possível encerrar a sala.';
+      render();
+    });
+  }
+
+  function cancelGame() {
+    if (!isHost() || !state.room || state.room.phase !== 'playing') return;
+    Store.mutate(state.code, function (room) {
+      if (room.phase !== 'playing') throw new Error('A partida não está em andamento.');
+      room.phase = 'cancelled';
+      log(room, 'O anfitrião cancelou a partida.', 'system');
+    }).then(function () {
+      if (unsubRoom) { unsubRoom(); unsubRoom = null; }
+      clearSession();
+      state.room = null;
+      state.code = '';
+      state.playerId = null;
+      state.isSpectator = false;
+      state.screen = 'home';
+      state.error = '';
+      render();
+    }).catch(function (err) {
+      state.error = err && err.message ? err.message : 'Não foi possível cancelar a partida.';
       render();
     });
   }
@@ -1224,6 +1277,10 @@
     var host = isHost();
     var players = room.players || [];
     var canStart = players.length >= MIN_PLAYERS;
+    var selectedThemes = masterRoomThemes(room);
+    var selectedThemeNames = selectedThemes.map(function (key) {
+      return masterTheme(key).name;
+    }).join(', ');
 
     var list = players.map(function (p) {
       return '<div class="player-row' + (p.id === room.hostId ? ' is-host' : '') + '">' +
@@ -1246,6 +1303,11 @@
             '<button type="button" class="small" id="copy-code-btn" onclick="__master.copyCode()">Copiar</button></div>') +
         '<div class="players-list">' + list + '</div>' +
         '<p class="hint">' + players.length + ' de ' + MAX_PLAYERS + ' jogadores. Mínimo de ' + MIN_PLAYERS + ' para começar.</p>' +
+        (host
+          ? '<div class="room-theme-settings"><h3>Matérias da partida</h3>' +
+            '<p class="hint">Escolha quais matérias estarão no tabuleiro e nas perguntas.</p>' +
+            renderThemePicker(selectedThemes, 'toggleRoomTheme') + '</div>'
+          : '<p class="hint"><b>Matérias:</b> ' + esc(selectedThemeNames) + '</p>') +
         (host
           ? '<button class="primary wide" style="margin-top:16px;" onclick="__master.startGame()"' + (canStart ? '' : ' disabled') + '>Iniciar partida</button>'
           : '<p class="hint">Aguarde o anfitrião iniciar a partida.</p>') +
@@ -1317,7 +1379,7 @@
             ? 'Os outros jogadores escolhem o tema em conjunto.'
             : (can ? 'Aguarde: os outros jogadores estão escolhendo o tema.' : 'Escolha o tema da pergunta final para ' + esc(p.name) + '.')) +
         '</p>' +
-        renderThemeGrid(MASTER_THEME_ORDER, canChooseFinal ? '__master.chooseFinalTheme' : null);
+        renderThemeGrid(room.availableThemes, canChooseFinal ? '__master.chooseFinalTheme' : null);
     }
 
     else if (step === 'final-answer' && q) {
@@ -1595,6 +1657,7 @@
     createOnline: createOnlineRoom,
     joinOnline: joinOnlineRoom,
     startGame: startGame,
+    toggleRoomTheme: toggleRoomTheme,
     chooseTheme: chooseTheme,
     chooseFinalTheme: chooseFinalTheme,
     placeBet: placeBet,
@@ -1603,6 +1666,7 @@
     copyCode: copyCode,
     leaveRoom: leaveRoom,
     cancelRoom: cancelRoom,
+    cancelGame: cancelGame,
     backHome: backHome,
     openRules: openRules,
     adminSkip: adminSkip,
@@ -1630,5 +1694,6 @@
      START
      ========================================================================== */
 
-  document.addEventListener('DOMContentLoaded', boot);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
 })();
