@@ -49,11 +49,15 @@
   }
 
   function loadApplication() {
-    var missing = window.MASTER_THEME_FILES.some(function (file) {
-      var key = file.split('/').pop().replace(/\.js(?:\?.*)?$/, '');
-      return !window.MASTER_THEMES[key];
-    });
-    if (missing) {
+    var validThemes = Array.isArray(window.MASTER_THEME_ORDER) &&
+      Array.isArray(window.MASTER_THEME_FILES) &&
+      window.MASTER_THEME_ORDER.length === window.MASTER_THEME_FILES.length &&
+      window.MASTER_THEME_ORDER.every(function (key) {
+        return !!window.MASTER_THEMES[key] &&
+          Array.isArray(window.MASTER_QUESTIONS[key]) &&
+          window.MASTER_QUESTIONS[key].length > 0;
+      });
+    if (!validThemes) {
       showLoadError();
       return;
     }
