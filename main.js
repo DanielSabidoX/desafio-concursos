@@ -125,8 +125,12 @@
       return Promise.resolve(room);
     },
 
-    get: function (code) {
-      if (useOnline()) {
+    // forceOnline = true é usado ao entrar em uma sala pelo código, antes de
+    // state.mode virar 'online'. Sem isso, um aparelho que abre o jogo pela
+    // primeira vez (mode padrão 'local') leria o localStorage em vez do
+    // Firestore e diria "Sala não encontrada".
+    get: function (code, forceOnline) {
+      if (useOnline() || forceOnline) {
         return onlineRooms().doc(code).get().then(function (snap) {
           return snap.exists ? snap.data() : null;
         });
@@ -680,7 +684,7 @@
 
     var pid = code + '-' + getDeviceId();
 
-    Store.get(code).then(function (room) {
+    Store.get(code, true).then(function (room) {
       if (!room || room.game !== 'master') {
         state.joinError = 'Sala não encontrada. Confira o código.';
         render();
@@ -1451,17 +1455,36 @@
     }).join('') + '</div>';
   }
 
+  function turnAlert(room) {
+    var step = room.step;
+    var text = 'Siga as instruções da rodada.';
+    if (step === 'theme') text = 'Escolha o tema da pergunta.';
+    else if (step === 'bet') text = 'Aposte uma ficha antes de responder.';
+    else if (step === 'answer') text = 'Marque a alternativa correta.';
+    else if (step === 'reveal') text = 'Confira o resultado e continue.';
+    else if (step === 'final-answer') text = 'Acerte a pergunta final para vencer!';
+    else if (step === 'final-reveal') text = 'Confira o resultado final.';
+
+    return '<div class="turn-alert">' +
+      '<span class="turn-alert-icon">🎯</span>' +
+      '<span class="turn-alert-text"><b>É a sua vez!</b> ' + esc(text) + '</span>' +
+      '<button type="button" class="small ghost" onclick="openMasterPanel(\'tabuleiro\')">Ver tabuleiro</button>' +
+    '</div>';
+  }
+
   function renderGame() {
     var room = state.room;
     var active = activePlayer(room);
 
     var sub = state.mode === 'local'
       ? 'Rodada ' + (room.round || 1) + ' · Vez de ' + (active ? active.name : '—')
-      : (isSpectator ? 'Modo espectador' : (myTurn() ? 'É a sua vez!' : 'Vez de ' + (active ? active.name : '—')));
+      : (state.isSpectator ? 'Modo espectador' : (myTurn() ? 'É a sua vez!' : 'Vez de ' + (active ? active.name : '—')));
 
     return renderMasthead('Partida em andamento · Sala ' + room.code, sub) +
       errorBanner() +
-      (state.isSpectator ? '<div class="banner banner-info">Você está assistindo a esta partida como espectador.</div>' : '') +
+      (state.isSpectator
+        ? '<div class="banner banner-info">Você está assistindo a esta partida como espectador.</div>'
+        : (state.mode !== 'local' && myTurn() ? turnAlert(room) : '')) +
       '<div class="game-layout">' +
         '<div class="game-main">' +
           renderTurnCard() +
