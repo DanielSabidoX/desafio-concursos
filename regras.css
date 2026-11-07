@@ -1,0 +1,167 @@
+/* ============================================================================
+   MASTER — regras.css
+   Estilos exclusivos do painel #regras-painel.
+   ========================================================================== */
+
+#regras-painel .regras-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  max-width: 860px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.regras-hero {
+  border: 1px solid rgba(242, 193, 78, 0.35);
+  border-radius: var(--radius-lg, 16px);
+  background:
+    radial-gradient(circle at 85% 0%, rgba(242, 193, 78, 0.18), transparent 55%),
+    linear-gradient(180deg, rgba(29, 35, 64, 0.85), rgba(18, 22, 42, 0.9));
+  padding: 16px 18px;
+}
+
+.regras-hero h4 {
+  font-size: 20px;
+  letter-spacing: 0.08em;
+  color: var(--gold-bright, #ffd76a);
+  margin-bottom: 6px;
+}
+
+.regras-hero p {
+  color: var(--ink-soft, #c9c4b8);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.regra-bloco {
+  border: 1px solid var(--line, #2c3358);
+  border-radius: var(--radius-md, 8px);
+  background: rgba(255, 255, 255, 0.025);
+  padding: 13px 15px;
+}
+
+.regra-bloco h5 {
+  margin: 0 0 8px;
+  font-family: 'Oswald', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold, #f2c14e);
+}
+
+.regra-bloco p,
+.regra-bloco li {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-soft, #c9c4b8);
+}
+
+.regra-bloco p + p { margin-top: 6px; }
+
+.regra-bloco ul,
+.regra-bloco ol {
+  margin: 6px 0 0;
+  padding-left: 20px;
+}
+
+.regra-bloco li { margin-bottom: 4px; }
+.regra-bloco li:last-child { margin-bottom: 0; }
+
+.regra-bloco b { color: var(--ink, #f4f1e8); }
+.regra-bloco em { color: var(--gold-bright, #ffd76a); font-style: normal; font-weight: 700; }
+
+.regra-temas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.regra-tema {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  border: 1px solid color-mix(in srgb, var(--rtc) 45%, transparent);
+  background: linear-gradient(150deg, color-mix(in srgb, var(--rtc) 18%, transparent), transparent 75%);
+  border-radius: var(--radius-md, 8px);
+  padding: 9px 11px;
+}
+
+.regra-tema-icon { font-size: 18px; line-height: 1.25; flex-shrink: 0; }
+
+.regra-tema-name {
+  font-family: 'Oswald', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink, #f4f1e8);
+  margin-bottom: 2px;
+}
+
+.regra-tema-desc {
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--ink-soft, #c9c4b8);
+}
+
+.regra-aviso {
+  border-left: 3px solid var(--gold, #f2c14e);
+  background: rgba(242, 193, 78, 0.07);
+  border-radius: 0 var(--radius-md, 8px) var(--radius-md, 8px) 0;
+  padding: 10px 13px;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--ink-soft, #c9c4b8);
+}
+
+.regra-aviso b { color: var(--gold-bright, #ffd76a); }
+
+.regra-numerada {
+  counter-reset: regra;
+  list-style: none;
+  padding-left: 0 !important;
+}
+
+.regra-numerada li {
+  counter-increment: regra;
+  position: relative;
+  padding-left: 30px;
+  min-height: 22px;
+}
+
+.regra-numerada li::before {
+  content: counter(regra);
+  position: absolute;
+  left: 0;
+  top: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  background: rgba(242, 193, 78, 0.14);
+  border: 1px solid rgba(242, 193, 78, 0.4);
+  color: var(--gold-bright, #ffd76a);
+  font-family: 'Oswald', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.regras-footer {
+  text-align: center;
+  font-size: 10.5px;
+  color: var(--muted, #8e8aa3);
+  line-height: 1.6;
+  padding: 4px 0 8px;
+}
+
+@media (max-width: 620px) {
+  #regras-painel .regras-body { padding: 12px; gap: 11px; }
+  .regra-temas { grid-template-columns: 1fr; }
+  .regras-hero { padding: 13px 14px; }
+}

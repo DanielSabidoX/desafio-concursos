@@ -1,0 +1,223 @@
+/* ============================================================================
+   MASTER — placar.css
+   Estilos exclusivos do painel #placar-painel (classificação + registro).
+   ========================================================================== */
+
+#placar-painel .placar-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+.placar-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.placar-pill {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft, #c9c4b8);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line, #2c3358);
+  border-radius: 99px;
+  padding: 5px 11px;
+}
+
+.placar-pill strong { color: var(--gold-bright, #ffd76a); }
+
+.placar-winner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid rgba(242, 193, 78, 0.5);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(242, 193, 78, 0.18), transparent 60%),
+    rgba(242, 193, 78, 0.06);
+  border-radius: var(--radius-md, 8px);
+  padding: 12px 14px;
+}
+
+.placar-winner .trophy {
+  font-size: 30px;
+  line-height: 1;
+  margin: 0;
+}
+
+.placar-winner-text {
+  font-family: 'Oswald', sans-serif;
+  font-size: 16px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--gold-bright, #ffd76a);
+}
+
+.placar-winner-text small {
+  display: block;
+  font-family: 'Nunito', sans-serif;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--muted, #8e8aa3);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.placar-table {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.placar-head,
+.placar-row {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1.6fr) minmax(0, 1fr) 60px 74px;
+  align-items: center;
+  gap: 10px;
+}
+
+.placar-head {
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted, #8e8aa3);
+  padding: 0 12px 2px;
+}
+
+.placar-row {
+  border: 1px solid var(--line, #2c3358);
+  border-radius: var(--radius-md, 8px);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 9px 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.placar-row::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--pc, #fff);
+}
+
+.placar-row.is-active {
+  border-color: rgba(242, 193, 78, 0.5);
+  background: rgba(242, 193, 78, 0.07);
+}
+
+.placar-row.is-winner {
+  border-color: rgba(242, 193, 78, 0.7);
+  background: rgba(242, 193, 78, 0.12);
+}
+
+.placar-pos {
+  font-family: 'Oswald', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--gold-bright, #ffd76a);
+  text-align: center;
+}
+
+.placar-name {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-weight: 800;
+  font-size: 13px;
+  min-width: 0;
+}
+
+.placar-name span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.placar-space {
+  font-size: 10.5px;
+  color: var(--ink-soft, #c9c4b8);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.placar-chips {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  justify-content: flex-start;
+}
+
+.mini-chip {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--mc, #666);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+.mini-chip.used {
+  opacity: 0.16;
+  filter: grayscale(1);
+}
+
+.placar-stats {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--ink-soft, #c9c4b8);
+  white-space: nowrap;
+  text-align: right;
+}
+
+.placar-stats b { color: var(--green-bright, #5ee89a); }
+.placar-stats i { color: #ff9b9b; font-style: normal; }
+
+.placar-log {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 360px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.placar-section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 2px 0 6px;
+  font-family: 'Oswald', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.placar-section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line, #2c3358);
+}
+
+@media (max-width: 620px) {
+  #placar-painel .placar-body { padding: 12px; gap: 12px; }
+  .placar-head,
+  .placar-row {
+    grid-template-columns: 26px minmax(0, 1.5fr) minmax(0, 1fr) 54px;
+    gap: 7px;
+  }
+  .placar-head .col-chips,
+  .placar-chips { display: none; }
+  .placar-stats { font-size: 9.5px; }
+  .placar-log { max-height: 300px; }
+}

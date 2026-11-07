@@ -1,0 +1,149 @@
+/* ============================================================================
+   MASTER — admin.css
+   Estilos exclusivos do painel #admin-painel (controles do anfitrião).
+   ========================================================================== */
+
+#admin-painel .admin-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  max-width: 760px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.admin-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.admin-pill {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft, #c9c4b8);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line, #2c3358);
+  border-radius: 99px;
+  padding: 5px 11px;
+}
+
+.admin-pill strong { color: var(--gold-bright, #ffd76a); }
+
+.admin-note {
+  border-left: 3px solid var(--red-bright, #ff6b6b);
+  background: rgba(225, 75, 75, 0.08);
+  border-radius: 0 var(--radius-md, 8px) var(--radius-md, 8px) 0;
+  padding: 10px 13px;
+  font-size: 12px;
+  line-height: 1.55;
+  color: #ffc2c2;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.admin-action {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  text-align: left;
+  padding: 13px 14px;
+  text-transform: none;
+  letter-spacing: 0;
+  border: 1px solid var(--line, #2c3358);
+  background: rgba(255, 255, 255, 0.035);
+  min-height: 78px;
+}
+
+.admin-action:hover:not(:disabled) {
+  border-color: var(--gold, #f2c14e);
+  background: rgba(242, 193, 78, 0.06);
+  transform: none;
+}
+
+.admin-action .aa-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink, #f4f1e8);
+}
+
+.admin-action .aa-desc {
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--muted, #8e8aa3);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 600;
+}
+
+.admin-action.is-danger { border-color: rgba(225, 75, 75, 0.4); }
+.admin-action.is-danger .aa-title { color: #ff9b9b; }
+.admin-action.is-danger:hover:not(:disabled) {
+  border-color: var(--red-bright, #ff6b6b);
+  background: rgba(225, 75, 75, 0.08);
+}
+
+.admin-players {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.admin-player-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 11px;
+  border: 1px solid var(--line, #2c3358);
+  border-radius: var(--radius-md, 8px);
+  background: rgba(255, 255, 255, 0.025);
+  font-size: 12.5px;
+}
+
+.admin-player-row .meta {
+  margin-left: auto;
+  font-size: 10.5px;
+  color: var(--muted, #8e8aa3);
+  white-space: nowrap;
+}
+
+.admin-player-row .badge {
+  margin-left: 0;
+  font-size: 9px;
+  padding: 2px 7px;
+}
+
+.admin-empty {
+  border: 1px dashed var(--line, #2c3358);
+  border-radius: var(--radius-md, 8px);
+  padding: 24px 16px;
+  text-align: center;
+  color: var(--muted, #8e8aa3);
+  font-size: 12.5px;
+  font-style: italic;
+  line-height: 1.6;
+}
+
+.admin-step {
+  font-family: 'Oswald', sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold-bright, #ffd76a);
+}
+
+@media (max-width: 620px) {
+  #admin-painel .admin-body { padding: 12px; gap: 11px; }
+  .admin-grid { grid-template-columns: 1fr; }
+  .admin-action { min-height: 0; }
+}

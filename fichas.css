@@ -1,0 +1,192 @@
+/* ============================================================================
+   MASTER — fichas.css
+   Estilos exclusivos do painel #fichas-painel (fichas de aposta e pote).
+   ========================================================================== */
+
+#fichas-painel .fichas-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+.fichas-summary {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 14px;
+  align-items: stretch;
+}
+
+.fichas-pot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border: 1px solid rgba(242, 193, 78, 0.4);
+  border-radius: var(--radius-lg, 16px);
+  background:
+    radial-gradient(circle at 50% 30%, rgba(242, 193, 78, 0.18), transparent 70%),
+    rgba(242, 193, 78, 0.05);
+  padding: 14px;
+  text-align: center;
+}
+
+.fichas-pot .pot-num {
+  font-family: 'Oswald', sans-serif;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--gold-bright, #ffd76a);
+  text-shadow: 0 3px 16px rgba(242, 193, 78, 0.45);
+}
+
+.fichas-pot .pot-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted, #8e8aa3);
+}
+
+.fichas-rule {
+  border: 1px dashed var(--line, #2c3358);
+  border-radius: var(--radius-md, 8px);
+  padding: 12px 14px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--ink-soft, #c9c4b8);
+}
+
+.fichas-rule b { color: var(--gold-bright, #ffd76a); }
+
+.fichas-current {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  border: 1px solid rgba(53, 196, 122, 0.4);
+  background: rgba(53, 196, 122, 0.08);
+  border-radius: var(--radius-md, 8px);
+  padding: 10px 13px;
+  font-size: 12.5px;
+  color: var(--ink-soft, #c9c4b8);
+}
+
+.fichas-current b { color: var(--green-bright, #5ee89a); }
+
+.fichas-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 10px;
+}
+
+.ficha-player {
+  position: relative;
+  border: 1px solid var(--line, #2c3358);
+  border-radius: var(--radius-md, 8px);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 12px 13px;
+  overflow: hidden;
+}
+
+.ficha-player::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--pc, #fff);
+}
+
+.ficha-player.is-active {
+  border-color: color-mix(in srgb, var(--pc) 65%, #fff 10%);
+  background: color-mix(in srgb, var(--pc) 10%, transparent);
+}
+
+.ficha-player-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.ficha-player-name {
+  font-weight: 800;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ficha-player-pos {
+  font-size: 10.5px;
+  color: var(--muted, #8e8aa3);
+  margin-left: auto;
+  white-space: nowrap;
+  max-width: 45%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ficha-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.ficha-chip {
+  --chip-c1: #ff8a8a;
+  --chip-c2: #c22d2d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 35%, var(--chip-c1), var(--chip-c2) 76%);
+  border: 3px dashed rgba(255, 255, 255, 0.92);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4), inset 0 0 0 2px rgba(255, 255, 255, 0.2);
+  font-family: 'Oswald', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.ficha-chip[data-v="2"] { --chip-c1: #8ab4ff; --chip-c2: #2451c2; }
+.ficha-chip[data-v="3"] { --chip-c1: #8affb4; --chip-c2: #1e9c58; }
+.ficha-chip[data-v="4"] { --chip-c1: #ffe98a; --chip-c2: #c2a11e; }
+.ficha-chip[data-v="5"] { --chip-c1: #d59aff; --chip-c2: #7d27c2; }
+
+.ficha-chip.is-used {
+  opacity: 0.2;
+  filter: grayscale(1);
+  box-shadow: none;
+}
+
+.ficha-chip.is-bet {
+  animation: ficha-bet-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes ficha-bet-pulse {
+  0%, 100% { box-shadow: 0 0 0 2px rgba(242, 193, 78, 0.5), 0 4px 10px rgba(0, 0, 0, 0.4); }
+  50% { box-shadow: 0 0 0 5px rgba(242, 193, 78, 0.85), 0 4px 14px rgba(0, 0, 0, 0.5); }
+}
+
+.ficha-player-meta {
+  margin-top: 9px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--muted, #8e8aa3);
+}
+
+.ficha-player-meta b { color: var(--ink-soft, #c9c4b8); }
+
+@media (max-width: 620px) {
+  #fichas-painel .fichas-body { padding: 12px; gap: 12px; }
+  .fichas-summary { grid-template-columns: 1fr; }
+  .fichas-pot { flex-direction: row; justify-content: center; gap: 12px; padding: 10px; }
+  .fichas-pot .pot-num { font-size: 30px; }
+  .fichas-list { grid-template-columns: 1fr; }
+}

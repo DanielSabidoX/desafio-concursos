@@ -1,0 +1,303 @@
+/* ============================================================================
+   MASTER — board.css
+   Estilos exclusivos do painel #tabuleiro-painel.
+   A moldura comum (.panel-handle, .panel-body etc.) vem de panels.css.
+   ========================================================================== */
+
+#tabuleiro-painel .board-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+}
+
+.board-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.board-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Oswald', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--gold-bright, #ffd76a);
+  text-shadow: 0 2px 14px rgba(242, 193, 78, 0.35);
+}
+
+.board-brand small {
+  font-family: 'Nunito', sans-serif;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: var(--muted, #8e8aa3);
+  text-shadow: none;
+}
+
+.board-pot {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft, #c9c4b8);
+  background: rgba(242, 193, 78, 0.09);
+  border: 1px solid rgba(242, 193, 78, 0.3);
+  border-radius: 99px;
+  padding: 6px 13px;
+}
+
+.board-pot b {
+  color: var(--gold-bright, #ffd76a);
+  font-family: 'Oswald', sans-serif;
+  font-size: 16px;
+}
+
+/* ---------------- grade do tabuleiro ---------------- */
+
+.master-board {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  gap: 6px;
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  aspect-ratio: 1 / 1;
+  padding: 10px;
+  border-radius: var(--radius-lg, 16px);
+  background:
+    radial-gradient(circle at 50% 45%, rgba(242, 193, 78, 0.06), transparent 65%),
+    rgba(6, 8, 18, 0.72);
+  border: 1px solid var(--line, #2c3358);
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.55);
+}
+
+.board-space {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 0;
+  min-height: 0;
+  padding: 3px;
+  border-radius: var(--radius-md, 8px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #fff;
+  text-align: center;
+  overflow: hidden;
+  cursor: default;
+  transition: transform 0.12s ease, box-shadow 0.15s ease, filter 0.15s ease;
+  text-transform: none;
+  letter-spacing: 0;
+  font-family: 'Nunito', sans-serif;
+  box-shadow: inset 0 -10px 18px rgba(0, 0, 0, 0.28);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
+}
+
+.board-space:hover {
+  transform: scale(1.035);
+  z-index: 3;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.55), 0 8px 18px rgba(0, 0, 0, 0.45);
+}
+
+.board-space::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), transparent 45%);
+  pointer-events: none;
+}
+
+.board-space.is-start,
+.board-space.is-finish {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.board-space.is-start {
+  background: linear-gradient(160deg, #5ee89a, #157a45 85%);
+}
+
+.board-space.is-finish {
+  background: linear-gradient(160deg, #ffe28f, #b8860b 85%);
+  color: #3a2a00;
+  text-shadow: none;
+}
+
+.board-space.is-finish::before,
+.board-space.is-start::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 1px dashed rgba(255, 255, 255, 0.65);
+  border-radius: 5px;
+  pointer-events: none;
+}
+
+.board-space.is-current {
+  animation: board-current-pulse 1.4s ease-in-out infinite;
+  z-index: 2;
+}
+
+@keyframes board-current-pulse {
+  0%, 100% { box-shadow: 0 0 0 2px #fff, 0 0 20px rgba(255, 255, 255, 0.55); }
+  50% { box-shadow: 0 0 0 4px #fff, 0 0 30px rgba(255, 255, 255, 0.8); }
+}
+
+.board-space.is-selected {
+  outline: 3px solid var(--gold-bright, #ffd76a);
+  outline-offset: -3px;
+}
+
+.space-num {
+  position: absolute;
+  top: 3px;
+  left: 4px;
+  font-size: 8px;
+  font-weight: 800;
+  opacity: 0.72;
+  line-height: 1;
+}
+
+.space-icon {
+  font-size: clamp(12px, 2.1vw, 19px);
+  line-height: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.space-name {
+  position: relative;
+  z-index: 1;
+  font-size: clamp(6.5px, 1.15vw, 9.5px);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  text-transform: uppercase;
+  padding: 0 1px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.space-name + .space-name {
+  margin-top: -1px;
+  opacity: 0.92;
+}
+
+.space-pawns {
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  display: flex;
+  flex-wrap: wrap-reverse;
+  justify-content: flex-end;
+  gap: 2px;
+  max-width: calc(100% - 6px);
+  z-index: 2;
+}
+
+.board-pawn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--pc, #fff);
+  border: 1.5px solid #fff;
+  color: #0b0d18;
+  font-family: 'Oswald', sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.55);
+}
+
+.board-pawn.is-me {
+  border-color: var(--gold-bright, #ffd76a);
+  box-shadow: 0 0 0 2px rgba(242, 193, 78, 0.65), 0 2px 5px rgba(0, 0, 0, 0.55);
+}
+
+/* ---------------- legenda / detalhe ---------------- */
+
+.board-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 10px;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--ink-soft, #c9c4b8);
+  letter-spacing: 0.04em;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  background: var(--lc);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18);
+}
+
+.board-info {
+  min-height: 44px;
+  border: 1px dashed var(--line, #2c3358);
+  border-radius: var(--radius-md, 8px);
+  padding: 9px 12px;
+  font-size: 12px;
+  color: var(--ink-soft, #c9c4b8);
+  line-height: 1.45;
+  text-align: center;
+}
+
+.board-info b { color: var(--gold-bright, #ffd76a); }
+
+.board-empty {
+  padding: 28px 14px;
+  text-align: center;
+  color: var(--muted, #8e8aa3);
+  font-style: italic;
+  line-height: 1.6;
+}
+
+/* ---------------- responsivo ---------------- */
+
+@media (max-width: 520px) {
+  #tabuleiro-painel .board-body { padding: 10px; gap: 10px; }
+  .master-board { gap: 3px; padding: 6px; }
+  .board-space { border-radius: 5px; padding: 1px; }
+  .space-name { display: none; }
+  .space-icon { font-size: 14px; }
+  .space-num { font-size: 6px; top: 2px; left: 2px; }
+  .board-pawn { width: 11px; height: 11px; font-size: 6px; border-width: 1px; }
+  .board-brand { font-size: 19px; }
+  .board-pot { padding: 4px 9px; font-size: 9.5px; }
+  .board-pot b { font-size: 13px; }
+}
+
+/* Telas médias: mantém o nome do tema em uma linha curta */
+@media (min-width: 521px) and (max-width: 760px) {
+  .space-name { font-size: 7px; }
+  .space-icon { font-size: 15px; }
+}

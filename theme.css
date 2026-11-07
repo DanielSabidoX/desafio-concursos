@@ -1,0 +1,62 @@
+/* ============================================================================
+   MASTER — theme.css
+   Tokens de design compartilhados por todos os arquivos CSS.
+   Deve ser carregado ANTES de panels.css e style.css.
+   ========================================================================== */
+
+:root {
+  /* ---- paleta base ---- */
+  --bg: #0b0d18;
+  --bg-2: #11142a;
+  --panel: #161a30;
+  --panel-2: #1d2340;
+  --panel-3: #252c4f;
+  --ink: #f4f1e8;
+  --ink-soft: #c9c4b8;
+  --muted: #8e8aa3;
+  --line: #2c3358;
+  --line-soft: rgba(255, 255, 255, 0.07);
+
+  /* ---- cores de destaque ---- */
+  --gold: #f2c14e;
+  --gold-bright: #ffd76a;
+  --red: #e14b4b;
+  --red-bright: #ff6b6b;
+  --green: #35c47a;
+  --green-bright: #5ee89a;
+  --blue: #4f8cff;
+  --ink-on-gold: #17130a;
+
+  /* ---- cores dos temas (espelham data.js) ---- */
+  --t-artes: #a855f7;
+  --t-ciencias: #14b8a6;
+  --t-entretenimento: #ec4899;
+  --t-esportes: #f97316;
+  --t-geografia: #3b82f6;
+  --t-historia: #eab308;
+
+  /* ---- aparência dos painéis flutuantes ---- */
+  --floating-bg: rgba(13, 16, 34, 0.97);
+  --floating-border: rgba(242, 193, 78, 0.35);
+  --floating-shadow: 0 18px 48px rgba(0, 0, 0, 0.65);
+
+  /* ---- espaçamento ---- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+
+  /* ---- raios ---- */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  /* ---- camadas ---- */
+  --z-tabbar: 10035;
+  --z-panel-open: 10030;
+  --z-modal-overlay: 10040;
+  --z-modal: 10041;
+}

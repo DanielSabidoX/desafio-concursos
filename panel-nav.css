@@ -1,0 +1,184 @@
+/* ============================================================================
+   MASTER — panel-nav.css
+   Navegação por abas: só um painel fica visível por vez, em tela cheia
+   (menos a faixa/colluna da barra de abas). Vale para PC e celular.
+   Deve ser carregado depois de theme.css e panels.css.
+   ========================================================================== */
+
+/* espaço no fim da página para a barra de abas não cobrir conteúdo */
+body { padding-bottom: calc(66px + env(safe-area-inset-bottom, 0px)); }
+
+/* ---- barra de abas fixa no rodapé (padrão: celular) ---- */
+.panel-tabbar {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--z-tabbar, 10035);
+  background: var(--floating-bg, rgba(13, 16, 34, 0.97));
+  border-top: 1px solid var(--floating-border, rgba(242, 193, 78, 0.35));
+  padding: 4px 4px calc(4px + env(safe-area-inset-bottom, 0px));
+  gap: 2px;
+  backdrop-filter: blur(8px);
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.panel-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: none;
+  border: none;
+  color: var(--muted, #8e8aa3);
+  font-family: 'Oswald', sans-serif;
+  font-size: 9.5px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 6px 2px;
+  border-radius: var(--radius-sm, 4px);
+  cursor: pointer;
+  box-shadow: none;
+  transform: none;
+}
+
+.panel-tab:hover:not(:disabled) {
+  background: rgba(242, 193, 78, 0.08);
+  color: var(--gold-bright, #ffd76a);
+  border-color: transparent;
+  transform: none;
+}
+
+.panel-tab .panel-tab-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.panel-tab.active { color: var(--gold-bright, #ffd76a); }
+.panel-tab[hidden] { display: none; }
+
+@keyframes tab-pulse-glow {
+  0%, 100% { box-shadow: inset 0 0 0 0 rgba(242, 193, 78, 0.6); }
+  50% { box-shadow: inset 0 0 0 3px rgba(242, 193, 78, 0.6); }
+}
+
+.panel-tab.needs-action {
+  color: var(--gold-bright, #ffd76a);
+  animation: tab-pulse-glow 1.5s ease-in-out infinite;
+}
+
+/* ============================================================================
+   PAINÉIS: escondidos por padrão; tela cheia quando abertos
+   ========================================================================== */
+
+#tabuleiro-painel,
+#fichas-painel,
+#placar-painel,
+#regras-painel,
+#admin-painel {
+  display: none !important;
+}
+
+#tabuleiro-painel.panel-open,
+#fichas-painel.panel-open,
+#placar-painel.panel-open,
+#regras-painel.panel-open {
+  display: block !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: calc(66px + env(safe-area-inset-bottom, 0px)) !important;
+  width: 100% !important;
+  height: auto !important;
+  max-width: 100% !important;
+  max-height: none !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  z-index: var(--z-panel-open, 10030) !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+  border: none !important;
+}
+
+/* o painel do anfitrião usa cabeçalho fixo + corpo rolável */
+#admin-painel.panel-open {
+  display: flex !important;
+  flex-direction: column;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: calc(66px + env(safe-area-inset-bottom, 0px)) !important;
+  width: 100% !important;
+  height: auto !important;
+  max-width: 100% !important;
+  max-height: none !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  z-index: var(--z-panel-open, 10030) !important;
+  overflow: hidden !important;
+  border: none !important;
+}
+
+#admin-painel .panel-body {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ============================================================================
+   DESKTOP: barra vira coluna fixa à esquerda
+   ========================================================================== */
+
+@media (min-width: 861px) {
+  body { padding-bottom: 60px; padding-left: 142px; }
+
+  .panel-tabbar {
+    left: 0;
+    right: auto;
+    top: 0;
+    bottom: 0;
+    width: 112px;
+    max-width: 112px;
+    height: 380px;
+    margin: auto 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    grid-auto-flow: row;
+    align-content: center;
+    justify-items: center;
+    align-items: center;
+    gap: 6px 4px;
+    border-top: none;
+    border-right: 1px solid var(--floating-border, rgba(242, 193, 78, 0.35));
+    border-radius: 0;
+    padding: 12px 14px 12px 12px;
+  }
+
+  .panel-tab {
+    padding: 8px 2px;
+    width: 100%;
+    height: 100%;
+  }
+
+  #tabuleiro-painel.panel-open,
+  #fichas-painel.panel-open,
+  #placar-painel.panel-open,
+  #regras-painel.panel-open,
+  #admin-painel.panel-open {
+    left: 142px !important;
+    right: 16px !important;
+    top: 16px !important;
+    bottom: 16px !important;
+    width: auto !important;
+    max-width: none !important;
+    border-radius: var(--radius-lg, 16px) !important;
+    border: 1px solid var(--floating-border, rgba(242, 193, 78, 0.35)) !important;
+  }
+}
