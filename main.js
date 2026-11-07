@@ -36,8 +36,10 @@
     isSpectator: false,
     local: {
       count: 2,
-      names: ['', '', '', '', '', '']
-    }
+      names: ['', '', '', '', '', ''],
+      themes: MASTER_THEME_ORDER.slice()
+    },
+    onlineThemes: MASTER_THEME_ORDER.slice()
   };
 
   var unsubRoom = null;
@@ -327,6 +329,19 @@
       '<span class="theme-chip-icon">' + t.icon + '</span>' + esc(t.name) + '</span>';
   }
 
+  function renderThemePicker(selected, actionName) {
+    return '<div class="theme-picker">' + MASTER_THEME_ORDER.map(function (key) {
+      var t = MASTER_THEMES[key];
+      var on = (selected || []).indexOf(key) >= 0;
+      return '<label class="theme-check' + (on ? ' is-on' : '') + '" style="--tc:' + t.color + ';--tc2:' + t.color2 + '">' +
+        '<input type="checkbox"' + (on ? ' checked' : '') +
+          ' onchange="__master.' + actionName + '(\'' + key + '\', this)">' +
+        '<span class="theme-check-icon">' + t.icon + '</span>' +
+        '<span class="theme-check-name">' + esc(t.name) + '</span>' +
+      '</label>';
+    }).join('') + '</div>';
+  }
+
   /* ==========================================================================
      REGRAS DE TURNO
      ========================================================================== */
@@ -538,6 +553,32 @@
 
   function setLocalName(i, value) {
     if (i >= 0 && i < MAX_PLAYERS) state.local.names[i] = value;
+  }
+
+  function applyThemeToggle(list, key, input) {
+    if (!MASTER_THEMES[key]) return list;
+
+    var checked = !!(input && input.checked);
+    var next = (list || []).slice();
+    var idx = next.indexOf(key);
+    if (checked && idx < 0) next.push(key);
+    if (!checked && idx >= 0) next.splice(idx, 1);
+
+    next = MASTER_THEME_ORDER.filter(function (k) { return next.indexOf(k) >= 0; });
+
+    if (input && input.closest) {
+      var label = input.closest('.theme-check');
+      if (label) label.classList.toggle('is-on', checked);
+    }
+    return next;
+  }
+
+  function toggleLocalTheme(key, input) {
+    state.local.themes = applyThemeToggle(state.local.themes, key, input);
+  }
+
+  function toggleOnlineTheme(key, input) {
+    state.onlineThemes = applyThemeToggle(state.onlineThemes, key, input);
   }
 
   function createLocalGame() {
