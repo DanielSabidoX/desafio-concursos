@@ -125,6 +125,10 @@ masterRegisterTheme(
 );
 ```
 
+Para destacar palavras ou trechos no enunciado ou nas alternativas, envolva o
+texto com `[[` e `]]`, por exemplo: `"q": "A palavra [[destacada]]..."`.
+O realce é aplicado com segurança tanto na pergunta quanto na tela de resposta.
+
 Para adicionar uma matéria:
 
 1. Crie `themes/biologia.js` usando `masterRegisterTheme` e inclua pelo menos uma pergunta.

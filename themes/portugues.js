@@ -29,7 +29,7 @@ masterRegisterTheme({
     "answer": 2
   },
   {
-    "q": "Na frase 'Embora estivesse cansado, continuou trabalhando', a conjunção destacada estabelece relação de:",
+    "q": "Na frase '[[Embora]] estivesse cansado, continuou trabalhando', a conjunção destacada estabelece relação de:",
     "options": [
       "Causa.",
       "Concessão.",
@@ -119,7 +119,7 @@ masterRegisterTheme({
     "answer": 2
   },
   {
-    "q": "Na frase 'É necessário que todos participem da reunião', a oração subordinada destacada é:",
+    "q": "Na frase 'É necessário [[que todos participem da reunião]]', a oração subordinada destacada é:",
     "options": [
       "Substantiva subjetiva.",
       "Substantiva objetiva direta.",
@@ -139,7 +139,7 @@ masterRegisterTheme({
     "answer": 1
   },
   {
-    "q": "Na frase 'O projeto, que foi aprovado ontem, será executado imediatamente', a oração destacada é:",
+    "q": "Na frase 'O projeto, [[que foi aprovado ontem]], será executado imediatamente', a oração destacada é:",
     "options": [
       "Subordinada adjetiva restritiva.",
       "Subordinada substantiva completiva nominal.",
@@ -253,7 +253,7 @@ masterRegisterTheme({
     "options": [
       "O servidor abriu a porta da sala.",
       "A reunião começou às oito horas.",
-      "Aquele gestor tem coração de pedra.",
+      "Aquele gestor tem [[coração de pedra]].",
       "O documento foi impresso ontem."
     ],
     "answer": 2
@@ -381,10 +381,10 @@ masterRegisterTheme({
   {
     "q": "Assinale a alternativa em que a palavra destacada exerce função de advérbio:",
     "options": [
-      "O servidor apresentou um relatório claro.",
-      "A equipe trabalhou bastante.",
-      "A decisão foi importante.",
-      "O documento estava completo."
+      "O servidor apresentou um relatório [[claro]].",
+      "A equipe trabalhou [[bastante]].",
+      "A decisão foi [[importante]].",
+      "O documento estava [[completo]]."
     ],
     "answer": 1
   },
@@ -439,7 +439,7 @@ masterRegisterTheme({
     "answer": 1
   },
   {
-    "q": "Em 'O relatório foi elaborado para que a administração pudesse avaliar os resultados', a oração destacada expressa:",
+    "q": "Em 'O relatório foi elaborado [[para que a administração pudesse avaliar os resultados]]', a oração destacada expressa:",
     "options": [
       "Causa.",
       "Condição.",

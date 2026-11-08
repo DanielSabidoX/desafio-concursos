@@ -690,6 +690,16 @@ input::placeholder { color: var(--muted); }
   margin-bottom: 14px;
 }
 
+.q-highlight {
+  border-radius: 3px;
+  padding: 0 2px;
+  background: rgba(242, 193, 78, 0.3);
+  color: var(--gold-bright);
+  text-decoration: underline;
+  text-decoration-color: var(--gold);
+  text-underline-offset: 3px;
+}
+
 .options {
   display: flex;
   flex-direction: column;

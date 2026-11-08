@@ -208,6 +208,10 @@
     });
   }
 
+  function formatQuestionText(text) {
+    return esc(text).replace(/\[\[([^\[\]]+)\]\]/g, '<mark class="q-highlight">$1</mark>');
+  }
+
   function genCode() {
     var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
     var code = 'M';
@@ -1430,7 +1434,7 @@
       var click = interactive ? ' onclick="__master.answer(' + i + ')"' : '';
       return '<button type="button" class="' + cls + '"' + click + disabled + '>' +
         '<span class="opt-letter">' + letter(i) + '</span>' +
-        '<span class="opt-text">' + esc(opt) + '</span>' +
+        '<span class="opt-text">' + formatQuestionText(opt) + '</span>' +
         (reveal && i === correctIndex ? '<span class="opt-mark">✓</span>' : '') +
       '</button>';
     }).join('');
@@ -1441,7 +1445,7 @@
     if (mode === 'final-answer') hint = '<p class="q-hint">Esta é a pergunta final: acertar garante a vitória.</p>';
 
     return '<div class="question-card' + (q.final ? ' final' : '') + '">' +
-      '<div class="q-text">' + esc(q.q) + '</div>' +
+      '<div class="q-text">' + formatQuestionText(q.q) + '</div>' +
       '<div class="options">' + options + '</div>' +
       hint +
     '</div>';
@@ -1471,14 +1475,14 @@
     }
 
     var revealQuestion = '<div class="question-card reveal-card">' +
-      '<div class="q-text">' + esc(q.q) + '</div>' +
+      '<div class="q-text">' + formatQuestionText(q.q) + '</div>' +
       '<div class="options">' + q.options.map(function (opt, i) {
         var cls = 'option';
         if (i === q.answer) cls += ' correct';
         if (q.chosen === i && i !== q.answer) cls += ' wrong';
         return '<button type="button" class="' + cls + '" disabled>' +
           '<span class="opt-letter">' + letter(i) + '</span>' +
-          '<span class="opt-text">' + esc(opt) + '</span>' +
+          '<span class="opt-text">' + formatQuestionText(opt) + '</span>' +
           (i === q.answer ? '<span class="opt-mark">✓</span>' : '') +
         '</button>';
       }).join('') + '</div>' +
