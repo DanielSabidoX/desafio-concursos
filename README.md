@@ -87,7 +87,7 @@ service cloud.firestore {
 | `theme-manifest.js` / `theme-loader.js` | lista e carregamento das matérias antes do jogo |
 | `main.js` | lógica do jogo (estado, turnos, apostas, respostas, ranking, salas) |
 | `firebase-config.js` | configuração do Firestore (opcional) |
-| `board.js` / `board.css` | painel do tabuleiro 6×6 com peões e pote |
+| `board.js` / `board.css` | percurso sinuoso com peões e pote |
 | `fichas.js` / `fichas.css` | painel das fichas de aposta e do pote |
 | `placar.js` / `placar.css` | classificação ao vivo + registro completo |
 | `regras.js` / `regras.css` | regras do Novo Master (transcritas das fotos) |
@@ -141,16 +141,17 @@ e nas perguntas, sem precisar alterar `main.js`.
 
 ### Tabuleiro
 
-`MASTER_BOARD` é uma lista de 36 casas em serpentina 6×6:
+`MASTER_BOARD` é um percurso de 20 casas em quatro fileiras sinuosas:
 
 - índice `0` = **INÍCIO**
-- índice `35` = **FIM**
+- índices `1` a `18` = casas do percurso
+- índice `19` = **FIM**
 - cada casa tem `themes: [...]`
 - casas com dois temas usam `split: true` (o jogador escolhe um dos temas)
+- medalhas marcam o caminho nas casas 5, 10 e 15; os peões ficam sobrepostos às casas.
 
-Para mudar o caminho, basta reordenar/editar as casas. O painel do tabuleiro
-desenha a serpentina automaticamente (linha 1 da esquerda para a direita, linha 2
-da direita para a esquerda, e assim por diante).
+Para mudar a sequência, basta reordenar/editar as casas. O painel desenha o
+percurso sinuoso automaticamente.
 
 ### Perguntas
 

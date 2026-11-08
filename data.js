@@ -34,13 +34,8 @@ function masterRegisterTheme(theme, questions) {
 
 /* ----------------------------------------------------------------------------
    TABULEIRO
-   36 casas dispostas em serpentina num grid 6x6:
-     linha 1 → da esquerda para a direita
-     linha 2 ← da direita para a esquerda
-     linha 3 → ...
-     linha 4 ← ...
-     linha 5 → ...
-     linha 6 ← ... (termina no FIM)
+   20 casas em um caminho sinuoso de quatro fileiras:
+     0 = INÍCIO, 1–18 = percurso, 19 = FIM
 
    Cada casa tem:
      themes: lista de temas possíveis naquela casa
@@ -49,48 +44,24 @@ function masterRegisterTheme(theme, questions) {
    -------------------------------------------------------------------------- */
 var MASTER_BOARD = [
   { type: 'start',  themes: [], label: 'INÍCIO' },
-
   { themes: ['artes'] },
   { themes: ['ciencias'] },
   { themes: ['entretenimento'] },
   { themes: ['esportes'] },
   { themes: ['geografia'] },
   { themes: ['historia'] },
-
-  { themes: ['artes', 'ciencias'], split: true },
   { themes: ['entretenimento'] },
   { themes: ['esportes'] },
+  { themes: ['artes'] },
   { themes: ['geografia', 'historia'], split: true },
-
-  { themes: ['artes'] },
-  { themes: ['ciencias'] },
-  { themes: ['entretenimento', 'esportes'], split: true },
-  { themes: ['geografia'] },
-  { themes: ['historia'] },
-
-  { themes: ['artes'] },
-  { themes: ['ciencias', 'entretenimento'], split: true },
-  { themes: ['esportes'] },
-  { themes: ['geografia'] },
-  { themes: ['historia', 'artes'], split: true },
-
   { themes: ['ciencias'] },
   { themes: ['entretenimento'] },
+  { themes: ['geografia'] },
   { themes: ['esportes', 'geografia'], split: true },
   { themes: ['historia'] },
-
-  { themes: ['artes'] },
-  { themes: ['ciencias', 'historia'], split: true },
-  { themes: ['entretenimento'] },
+  { themes: ['artes', 'ciencias'], split: true },
   { themes: ['esportes'] },
   { themes: ['geografia'] },
-
-  { themes: ['artes', 'historia'], split: true },
-  { themes: ['ciencias'] },
-  { themes: ['entretenimento'] },
-  { themes: ['esportes'] },
-  { themes: ['geografia'] },
-
   { type: 'finish', themes: [], label: 'FIM' }
 ];
 var MASTER_BOARD_THEME_KEYS = [];

@@ -1,6 +1,6 @@
 /* ============================================================================
    MASTER — board.js
-   Painel do tabuleiro. Independente do main.js: lê o estado por
+   Painel do percurso. Independente do main.js: lê o estado por
    window.MasterApp e redesenha a cada evento "master:update".
 
    Uso:
@@ -66,7 +66,14 @@
     return 'Casa ' + pos + ' — ' + names.join(' / ');
   }
 
-  function gridArea(pos) {
+  function gridArea(pos, total) {
+    if (total === 20) {
+      var pathRow = Math.floor(pos / 5);
+      var pathOffset = pos % 5;
+      var pathCol = pathRow % 2 === 0 ? pathOffset * 2 + 1 : 9 - pathOffset * 2;
+      return (7 - pathRow * 2) + ' / ' + pathCol;
+    }
+
     var rowFromBottom = Math.floor(pos / 6);
     var col = pos % 6;
     if (rowFromBottom % 2 === 1) col = 5 - col;
@@ -92,10 +99,11 @@
     return html ? '<div class="space-pawns">' + html + '</div>' : '';
   }
 
-  function renderSpace(space, pos, room) {
+  function renderSpace(space, pos, room, total) {
     var cls = 'board-space';
     var inner = '';
     var bg = '';
+    var medal = '';
 
     if (!space) {
       cls += '';
@@ -111,6 +119,7 @@
     } else {
       bg = 'background:' + spaceColor(space);
       var themes = space.themes || [];
+      medal = pos === 5 ? '🥉' : (pos === 10 ? '🥈' : (pos === 15 ? '🥇' : ''));
       if (themes.length > 1) {
         inner = '<span class="space-icon">' + themeIcon(themes[0]) + themeIcon(themes[1]) + '</span>' +
           '<span class="space-name">' + esc(themeShort(themes[0])) + '</span>' +
@@ -127,10 +136,11 @@
     if (selectedPos === pos) cls += ' is-selected';
 
     return '<button type="button" class="' + cls + '" data-pos="' + pos + '"' +
-      ' style="grid-area:' + gridArea(pos) + ';' + bg + '"' +
+    ' style="grid-area:' + gridArea(pos, total) + ';' + bg + '"' +
       ' title="' + esc(spaceTitle(space, pos)) + '" aria-label="' + esc(spaceTitle(space, pos)) + '">' +
       '<span class="space-num">' + (space && (space.type === 'start' || space.type === 'finish') ? '' : pos) + '</span>' +
-      inner +
+    (medal ? '<span class="space-medal" aria-label="Marco de percurso">' + medal + '</span>' : '') +
+    inner +
       pawnsAt(room, pos) +
       '</button>';
   }
@@ -173,6 +183,17 @@
     return 'Toque em uma casa do tabuleiro para ver os detalhes.';
   }
 
+  function routeSvg() {
+    var path = 'M 56 650 L 278 650 L 500 650 L 722 650 L 944 650 L 944 450 ' +
+      'L 722 450 L 500 450 L 278 450 L 56 450 L 56 250 L 278 250 L 500 250 ' +
+      'L 722 250 L 944 250 L 944 50 L 722 50 L 500 50 L 278 50 L 56 50';
+    return '<svg class="board-route" viewBox="0 0 1000 700" preserveAspectRatio="none" aria-hidden="true">' +
+      '<path class="route-outline" d="' + path + '"></path>' +
+      '<path class="route-road" d="' + path + '"></path>' +
+      '<path class="route-center" d="' + path + '"></path>' +
+    '</svg>';
+  }
+
   function chrome(room, bodyHtml, pot) {
     return '<div class="panel-handle">' +
         '<h3>Tabuleiro</h3>' +
@@ -204,11 +225,12 @@
       return;
     }
 
-    var cells = '';
     var board = window.masterRoomBoard ? window.masterRoomBoard(room) : (window.MASTER_BOARD || []);
-    for (var i = 0; i < board.length; i++) cells += renderSpace(board[i], i, room);
-
-    var html = '<div class="master-board">' + cells + '</div>';
+    var cells = '';
+    for (var i = 0; i < board.length; i++) cells += renderSpace(board[i], i, room, board.length);
+    var isNewPath = board.length === 20;
+    var html = '<div class="master-board' + (isNewPath ? ' is-winding' : ' is-classic') + '">' +
+      (isNewPath ? routeSvg() : '') + cells + '</div>';
     host.innerHTML = chrome(room, html, room.pot || 0);
   }
 
